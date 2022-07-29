@@ -1,0 +1,27 @@
+{
+  "name": "com.quartzified.clockwork.ui",
+  "version": "0.1.0",
+  "displayName": "Quartzified Clockwork UI",
+  "description": "A simple yet powerful UI extension for unity that runs like clockwork.",
+  "unity": "2021.3",
+  "unityRelease": "6f1",
+  "documentationUrl": "",
+  "changelogUrl": "",
+  "licensesUrl": "",
+  "keywords": [
+    "Quartzified",
+    "Clockwork",
+    "UI",
+    "Extension"
+  ],
+  "author": {
+    "name": "Quartzi",
+    "email": "virgil@quartzi.io",
+    "url": "https://www.quartzi.io"
+  },
+    "dependencies": {
+      "com.quartzified.utility.library": "https://github.com/Quartzified-Studios/Quartzified-Utility-Library.git",
+      "com.quartzified.clockwork.audio": "https://github.com/Quartzified-Studios/Quartzified-Audio.git"
+    },
+  "type": "tool"
+}
