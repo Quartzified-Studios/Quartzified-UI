@@ -19,9 +19,5 @@
     "email": "virgil@quartzi.io",
     "url": "https://www.quartzi.io"
   },
-    "dependencies": {
-      "com.quartzified.utility.library": "https://github.com/Quartzified-Studios/Quartzified-Utility-Library.git",
-      "com.quartzified.clockwork.audio": "https://github.com/Quartzified-Studios/Quartzified-Audio.git"
-    },
   "type": "tool"
 }
