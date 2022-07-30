@@ -1,4 +1,4 @@
 # ClockworkUI (Quartzified-UI)
  
-[Uses TextMeshProUGUI]  
-[Uses Quartzified-Audio] ([here](https://github.com/Quartzified-Studios/Quartzified-Audio))
+**[** **Uses** Quartzified-Utility-Library **]** ([here](https://github.com/Quartzified-Studios/Quartzified-Utility-Library))  
+**[** **Uses** Quartzified-Audio **]** ([here](https://github.com/Quartzified-Studios/Quartzified-Audio))
