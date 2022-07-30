@@ -1,5 +1,5 @@
 
-namespace Clockwork.UI
+namespace Quartzified.UI
 {
     public enum WindowCloseOption
     {

@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-namespace Clockwork.UI
+namespace Quartzified.UI
 {
     public partial class UIDraggable : MonoBehaviour, IDraggable
     {

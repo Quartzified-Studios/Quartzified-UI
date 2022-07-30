@@ -1,6 +1,6 @@
 using UnityEngine.EventSystems;
 
-namespace Clockwork.UI
+namespace Quartzified.UI
 {
     public interface IDraggable : IBeginDragHandler, IDragHandler, IEndDragHandler
     {

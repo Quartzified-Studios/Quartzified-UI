@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace Clockwork.UI
+namespace Quartzified.UI
 {
     public class UIMouseHoverColor : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {

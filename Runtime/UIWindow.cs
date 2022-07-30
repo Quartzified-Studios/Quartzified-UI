@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Clockwork.UI
+namespace Quartzified.UI
 {
     public class UIWindow : UIDraggable
     {

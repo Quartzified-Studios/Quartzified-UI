@@ -1,91 +1,94 @@
-using Quartzified.UI;
 using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class UITooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+namespace Quartzified.UI
 {
-    public GameObject tooltipPrefab;
-    [TextArea(1, 30)] public string text = "";
-
-    GameObject current;
-
-    public bool IsVisible() => current != null;
-
-    void Update()
+    public class UITooltip : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
     {
-        if (current)
-            current.GetComponentInChildren<TextMeshProUGUI>().text = text;
-    }
+        public GameObject tooltipPrefab;
+        [TextArea(1, 30)] public string text = "";
 
-    void ShowToolTip(float delay)
-    {
-        Invoke(nameof(CreateToolTip), delay);
-    }
+        GameObject current;
 
-    public void OnPointerEnter(PointerEventData d)
-    {
-        ShowToolTip(0.5f);
-    }
+        public bool IsVisible() => current != null;
 
-    void CreateToolTip()
-    {
-        if (tooltipPrefab == null)
+        void Update()
         {
-            Debug.LogWarning("Tooltip Prefab is not set!");
-            return;
+            if (current)
+                current.GetComponentInChildren<TextMeshProUGUI>().text = text;
         }
 
-        current = Instantiate(tooltipPrefab, transform.position, Quaternion.identity);
+        void ShowToolTip(float delay)
+        {
+            Invoke(nameof(CreateToolTip), delay);
+        }
 
-        Transform uiParent = transform.root;
+        public void OnPointerEnter(PointerEventData d)
+        {
+            ShowToolTip(0.5f);
+        }
 
-        current.transform.SetParent(uiParent, true);
-        current.transform.SetAsLastSibling();
+        void CreateToolTip()
+        {
+            if (tooltipPrefab == null)
+            {
+                Debug.Debug.LogWarning("Tooltip Prefab is not set!");
+                return;
+            }
 
-        current.GetComponentInChildren<TextMeshProUGUI>().text = text;
+            current = Instantiate(tooltipPrefab, transform.position, Quaternion.identity);
 
-        StartCoroutine(PositionTooltip(current));
+            Transform uiParent = transform.root;
+
+            current.transform.SetParent(uiParent, true);
+            current.transform.SetAsLastSibling();
+
+            current.GetComponentInChildren<TextMeshProUGUI>().text = text;
+
+            StartCoroutine(PositionTooltip(current));
+        }
+
+        // Reposition the tooltip after its Content Sizer did its magic
+        // Wait For Next Frame required to detect changes in rect transform
+        IEnumerator PositionTooltip(GameObject current)
+        {
+            yield return new WaitForEndOfFrame();
+
+            RectTransform rect = current.GetComponent<RectTransform>();
+
+            float offsetX = (transform.GetComponent<RectTransform>().GetSize().x / 2f) + (rect.GetWidth() / 2f) - 4f;
+            float offsetY = (transform.GetComponent<RectTransform>().GetSize().y / 2f) + (rect.GetHeight() / 2f) - 4f;
+
+            rect.position = new Vector3(current.transform.position.x + offsetX, current.transform.position.y - offsetY, 0);
+        }
+
+        #region Destroy
+
+        void DestroyToolTip()
+        {
+            CancelInvoke(nameof(CreateToolTip));
+
+            Destroy(current);
+        }
+
+        public void OnPointerExit(PointerEventData d)
+        {
+            DestroyToolTip();
+        }
+
+        void OnDisable()
+        {
+            DestroyToolTip();
+        }
+
+        void OnDestroy()
+        {
+            DestroyToolTip();
+        }
+
+        #endregion
     }
 
-    // Reposition the tooltip after its Content Sizer did its magic
-    // Wait For Next Frame required to detect changes in rect transform
-    IEnumerator PositionTooltip(GameObject current)
-    {
-        yield return new WaitForEndOfFrame();
-
-        RectTransform rect = current.GetComponent<RectTransform>();
-
-        float offsetX = (transform.GetComponent<RectTransform>().GetSize().x / 2f) + (rect.GetWidth() / 2f) - 4f;
-        float offsetY = (transform.GetComponent<RectTransform>().GetSize().y / 2f) + (rect.GetHeight() / 2f) - 4f;
-
-        rect.position = new Vector3(current.transform.position.x + offsetX, current.transform.position.y - offsetY, 0);
-    }
-
-    #region Destroy
-
-    void DestroyToolTip()
-    {
-        CancelInvoke(nameof(CreateToolTip));
-
-        Destroy(current);
-    }
-
-    public void OnPointerExit(PointerEventData d)
-    {
-        DestroyToolTip();
-    }
-
-    void OnDisable()
-    {
-        DestroyToolTip();
-    }
-
-    void OnDestroy()
-    {
-        DestroyToolTip();
-    }
-
-    #endregion
 }
