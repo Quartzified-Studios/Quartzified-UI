@@ -12,7 +12,7 @@ namespace Quartzified.UI
             window = transform;
         }
 
-        public void HandleDrag(PointerEventData d)
+        public virtual void HandleDrag(PointerEventData d)
         {
             window.SendMessage("OnWindowDrag", d, SendMessageOptions.DontRequireReceiver);
 
