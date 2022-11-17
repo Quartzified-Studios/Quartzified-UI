@@ -34,7 +34,7 @@ namespace Quartzified.UI
         {
             if (tooltipPrefab == null)
             {
-                Debug.Debug.LogWarning("Tooltip Prefab is not set!");
+                Debug.LogWarning("Tooltip Prefab is not set!");
                 return;
             }
 
