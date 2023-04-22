@@ -50,12 +50,15 @@ namespace Quartzified.UI
             else
             {
                 current = Instantiate(tooltipPrefab, transform.position, Quaternion.identity);
+                current.SetActive(false);
                 Transform uiParent = transform.root;
 
                 current.transform.SetParent(uiParent, true);
                 current.transform.SetAsLastSibling();
 
                 current.GetComponentInChildren<TextMeshProUGUI>().text = text;
+
+                yield return new WaitForEndOfFrame();
 
                 StartCoroutine(PositionTooltip(current));
 
