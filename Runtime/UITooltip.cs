@@ -12,17 +12,25 @@ namespace Quartzified.UI
 
         GameObject current;
 
-        public bool IsVisible() => current != null;
+        /// <summary>
+        /// Returns true if the tooltip is currently active
+        /// </summary>
+        /// <returns></returns>
+        public bool IsActive() => current != null;
 
-        void Update()
-        {
-            if (current)
-                current.GetComponentInChildren<TextMeshProUGUI>().text = text;
-        }
+        /// <summary>
+        /// Returns true if the tooltip is currently active and visible
+        /// </summary>
+        /// <returns></returns>
+        public bool IsVisible() => IsActive() && current.gameObject.activeInHierarchy;
+
 
         void ShowToolTip(float delay)
         {
-            Invoke(nameof(CreateToolTip), delay);
+            if(current == null)
+            {
+                StartCoroutine(CreateToolTip(delay));
+            }
         }
 
         public void OnPointerEnter(PointerEventData d)
@@ -30,24 +38,31 @@ namespace Quartzified.UI
             ShowToolTip(0.5f);
         }
 
-        void CreateToolTip()
+        IEnumerator CreateToolTip(float delay)
         {
+            yield return new WaitForSeconds(delay);
+
             if (tooltipPrefab == null)
             {
                 Debug.LogWarning("Tooltip Prefab is not set!");
-                return;
+                yield return null;
             }
+            else
+            {
+                current = Instantiate(tooltipPrefab, transform.position, Quaternion.identity);
+                Transform uiParent = transform.root;
 
-            current = Instantiate(tooltipPrefab, transform.position, Quaternion.identity);
+                current.transform.SetParent(uiParent, true);
+                current.transform.SetAsLastSibling();
 
-            Transform uiParent = transform.root;
+                current.GetComponentInChildren<TextMeshProUGUI>().text = text;
 
-            current.transform.SetParent(uiParent, true);
-            current.transform.SetAsLastSibling();
+                StartCoroutine(PositionTooltip(current));
 
-            current.GetComponentInChildren<TextMeshProUGUI>().text = text;
+                Debug.Log("Enable");
 
-            StartCoroutine(PositionTooltip(current));
+                current.SetActive(true);
+            }
         }
 
         // Reposition the tooltip after its Content Sizer did its magic
@@ -57,20 +72,28 @@ namespace Quartzified.UI
             yield return new WaitForEndOfFrame();
 
             RectTransform rect = current.GetComponent<RectTransform>();
+            Vector2 myRectSize = transform.GetComponent<RectTransform>().GetSize();
 
-            float offsetX = (transform.GetComponent<RectTransform>().GetSize().x / 2f) + (rect.GetWidth() / 2f) - 4f;
-            float offsetY = (transform.GetComponent<RectTransform>().GetSize().y / 2f) + (rect.GetHeight() / 2f) - 4f;
+            float offsetX = (myRectSize.x / 2f) + (rect.GetWidth() / 2f) - 4f;
+            float offsetY = (myRectSize.y / 2f) + (rect.GetHeight() / 2f) - 4f;
 
             rect.position = new Vector3(current.transform.position.x + offsetX, current.transform.position.y - offsetY, 0);
+
+            Debug.Log("Move UI");
+
+            yield return null;
         }
 
         #region Destroy
 
         void DestroyToolTip()
         {
-            CancelInvoke(nameof(CreateToolTip));
+            StopAllCoroutines();
 
-            Destroy(current);
+            if (current != null)
+            {
+                Destroy(current);
+            }
         }
 
         public void OnPointerExit(PointerEventData d)
