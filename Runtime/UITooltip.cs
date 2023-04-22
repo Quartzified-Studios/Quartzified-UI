@@ -25,6 +25,14 @@ namespace Quartzified.UI
         public bool IsVisible() => IsActive() && current.gameObject.activeInHierarchy;
 
 
+        void Update()
+        {
+            if(current != null)
+            {
+                current.GetComponentInChildren<TextMeshProUGUI>().text = text;
+            }
+        }
+
         void ShowToolTip(float delay)
         {
             if(current == null)
@@ -47,27 +55,17 @@ namespace Quartzified.UI
                 Debug.LogWarning("Tooltip Prefab is not set!");
                 yield return null;
             }
-            else if(string.IsNullOrEmpty(text))
-            {
-                Debug.LogWarning("Tooltip Text is Empty");
-                yield return null;
-            }
             else
             {
                 current = Instantiate(tooltipPrefab, transform.position, Quaternion.identity);
-                current.SetActive(false);
                 Transform uiParent = transform.root;
 
                 current.transform.SetParent(uiParent, true);
                 current.transform.SetAsLastSibling();
 
-                yield return new WaitForEndOfFrame();
-
                 current.GetComponentInChildren<TextMeshProUGUI>().text = text;
 
                 StartCoroutine(PositionTooltip(current));
-
-                Debug.Log("Enable");
 
                 current.SetActive(true);
             }
@@ -86,8 +84,6 @@ namespace Quartzified.UI
             float offsetY = (myRectSize.y / 2f) + (rect.GetHeight() / 2f) - 4f;
 
             rect.position = new Vector3(current.transform.position.x + offsetX, current.transform.position.y - offsetY, 0);
-
-            Debug.Log("Move UI");
 
             yield return null;
         }
