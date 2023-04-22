@@ -47,6 +47,11 @@ namespace Quartzified.UI
                 Debug.LogWarning("Tooltip Prefab is not set!");
                 yield return null;
             }
+            else if(string.IsNullOrEmpty(text))
+            {
+                Debug.LogWarning("Tooltip Text is Empty");
+                yield return null;
+            }
             else
             {
                 current = Instantiate(tooltipPrefab, transform.position, Quaternion.identity);
@@ -56,9 +61,9 @@ namespace Quartzified.UI
                 current.transform.SetParent(uiParent, true);
                 current.transform.SetAsLastSibling();
 
-                current.GetComponentInChildren<TextMeshProUGUI>().text = text;
-
                 yield return new WaitForEndOfFrame();
+
+                current.GetComponentInChildren<TextMeshProUGUI>().text = text;
 
                 StartCoroutine(PositionTooltip(current));
 
